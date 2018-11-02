@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+
+<script>
+function showNotification(title) {
+  return new Notification(
+    title,
+    {
+      body: '本文です',
+      data: {
+        xxx: 'hoge'
+      }
+    }
+  );
+}
+$(function(){
+  // ブラウザが通知をサポートしているか確認する
+  if (!('Notification' in window)) {
+    alert('未対応のブラウザです');
+  }
+  else {
+    // 許可を求める
+    Notification.requestPermission()
+      .then((permission) => {
+        if (permission == 'granted') {
+          // 許可
+          setInterval(function(){
+            var n = showNotification('test');
+            n.onclick = function(x) { window.focus(); this.close(); };
+          }, 5000);
+        } else if (permission == 'denied') {
+          // 拒否
+          alert('denied')
+        } else if (permission == 'default') {
+          // 無視
+          alert('default')
+        }
+      });
+  }
+})
+</script>
+</body>
+</html>
